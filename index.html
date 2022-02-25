@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" >
+        <link rel="stylesheet" href="styles.css">
+        <style>
+            #result {padding: 20px; width: 150px; border: 1px solid black;}
+        </style>
+        <script language="javascript">
+            window.onload = function() {
+                btn = document.getElementById("playbutton");
+                document.getElementById("before-sorting").innerHTML = "0,0,0,0,0";
+                document.getElementById("after-sorting").innerHTML = "0,0,0,0,0";
+                document.getElementById("lucky-ball").innerHTML = "0";
+                get_winning_nums();
+                get_winning_lucky();
+                document.getElementById("payout").innerText = "$0";
+                btn.onclick = get_nums;
+                
+            }
+            function get_nums() {
+                id = this.id;
+                
+                let nums = [0, 0, 0, 0, 0];
+
+                for (let i = 0; i < 5; i++) {
+                    nums[i] = (Math.random()*47 + 1);
+                    nums[i] = nums[i].toFixed(0);
+
+                    for (let j = 0; j < i; j++) {
+                        if (nums[i] == nums[j]) {
+                            nums[j] = (Math.random()*47 + 1);
+                            nums[j] = nums[j].toFixed(0);
+                        }
+                    }   
+                }
+                document.getElementById("before-sorting").innerHTML = nums;
+                nums = sort(nums);
+                
+                let lucky_ball = get_lucky_ball();
+                let winning_nums = get_winning_nums();
+                let winning_lucky = get_winning_lucky();
+                let num_matches = get_num_matches(nums, winning_nums);
+                let lucky = check_lucky_ball(lucky_ball, winning_lucky);
+                get_winnings(num_matches, lucky);
+		    }
+            function sort(nums) {
+                nums.sort(function(a, b){return a - b});
+                document.getElementById("after-sorting").innerHTML = nums;
+                return nums;
+                
+            }
+            function get_lucky_ball() {
+                let lucky_ball = (Math.random()*17 + 1);
+                lucky_ball = lucky_ball.toFixed(0);
+                document.getElementById("lucky-ball").innerHTML = lucky_ball;
+                return lucky_ball;
+            }
+            function get_winning_nums() {
+                const winning_nums = [12, 15, 24, 35, 48];
+                document.getElementById("winning-nums").innerHTML = winning_nums;
+                return winning_nums;
+            }
+            function get_winning_lucky() {
+                const winning_lucky = 3;
+                document.getElementById("winning-lucky").innerHTML = winning_lucky;
+                return winning_lucky;
+            }
+            function get_num_matches(nums, winning_nums) {
+                let count = 0;
+                for (let i = 0; i < 5; i++) {
+                    if (nums[i] == winning_nums[i]) {
+                        count++;
+                    }
+                }
+                return count;
+            }
+            function check_lucky_ball(lucky_ball, winning_lucky) {
+                if (lucky_ball == winning_lucky) {
+                    return true;
+                }
+
+                return false;
+            }
+            function get_winnings(num_matches, lucky) {
+
+                let pick_total = [num_matches, lucky];
+                
+
+                switch (pick_total[0]) {
+                    case (5):
+                        if (pick_total[1] == true) {
+                            document.getElementById("payout").innerText = "$7000 a WEEK for LIFE";
+                        } else {
+                            document.getElementById("payout").innerText = "$25000 a YEAR for LIFE";
+                        }
+                        break;
+                    case (4):
+                        if (pick_total[1] == true) {
+                            document.getElementById("payout").innerText = "$5000";
+                        } else {
+                            document.getElementById("payout").innerText = "$200";
+                        }
+                        break;
+                    case (3):
+                        if (pick_total[1] == true) {
+                            document.getElementById("payout").innerText = "$150";
+                        } else {
+                            document.getElementById("payout").innerText = "$20";
+                        }
+                        break;
+                    case (2):
+                        if (pick_total[1] == true) {
+                            document.getElementById("payout").innerText = "$25";
+                        } else {
+                            document.getElementById("payout").innerText = "$3";
+                        }
+                        break;
+                    case (1):
+                        if (pick_total[1] == true) {
+                            document.getElementById("payout").innerText = "$6";
+                        }
+                        break;
+                    case (0): 
+                        if (pick_total[1] == true) {
+                            document.getElementById("payout").innerText = "$4";
+                        }
+                        break;
+                }
+
+            }
+
+        </script>
+    </head>
+    <body>
+        <h1>Lottery Sim</h2>
+        <div class="results">
+            <br>
+            <div class="label">before sorting:</div>
+            <div id="before-sorting"></div>
+            <br>
+            <div class="label">after sorting:</div>
+            <div class="after-sorting" id="after-sorting"></div>
+            <br>
+            <div class="label">lucky ball:</div>
+            <div class="lucky-ball" id="lucky-ball"></div>
+            <br>
+            <div class="label">winning nums:</div>
+            <div class="winning-nums" id="winning-nums"></div>
+            <br>
+            <div class="label">winning lucky ball:</div>
+            <div class="winning-lucky" id="winning-lucky"></div>
+            <br>
+            <div class="label">payout:</div>
+            <div class="payout" id="payout"></div>
+            <input type="button" name="playbutton" value="play!"
+            id="playbutton" class="button">
+        </div>
+        
+    </body>
+</html>
